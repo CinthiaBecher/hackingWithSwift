@@ -8,8 +8,9 @@ struct SelectedStyle: ViewModifier {
         ZStack(alignment: .bottomTrailing) {
             content
                 .padding()
-                .background(selected == actual ? Color.green : Color.yellow)
-                .foregroundColor(.white)
+                .cornerRadius(30.0)
+                .border(selected == actual ? Color.green : Color.yellow)
+                
         }
     }
 }
@@ -21,7 +22,7 @@ extension View {
 }
 
 struct ContentView: View {
-    var options = ["👊🏻 Rock", "🤚🏻 Paper", "✌️ Scissors"]
+    var options = ["rock", "paper", "scissor"]
     @State private var optionSelected = ""
     @State var win = true
     
@@ -40,8 +41,12 @@ struct ContentView: View {
         VStack{
             HStack {
                 ForEach(options, id: \.self) { option in
-                    Text(option)
+                    Image(option)
+                        .resizable()
+                        .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
                         .selected(with: optionSelected, actual: option)
+                        
+                        
                 }
             }
             HStack{

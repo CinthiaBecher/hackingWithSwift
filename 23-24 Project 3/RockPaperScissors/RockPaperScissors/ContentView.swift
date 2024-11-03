@@ -7,9 +7,14 @@ struct SelectedStyle: ViewModifier {
     func body(content: Content) -> some View {
         ZStack(alignment: .bottomTrailing) {
             content
-                .padding()
-                .cornerRadius(30.0)
-                .border(selected == actual ? Color.green : Color.yellow)
+                .padding(10)
+                .clipShape(Circle())
+                .overlay(
+                Circle()
+                    .stroke(selected == actual ? Color.green : Color.yellow, lineWidth: 4)
+                    .frame(width: 90, height: 90))
+                
+                
                 
         }
     }
@@ -29,72 +34,85 @@ struct ContentView: View {
     @State var score = 0
     
     var body: some View {
-        Text("Score: \(score)" )
-        Button("▶️ Play"){
-            optionSelected = options[Int.random(in: 0..<3)]
-            win.toggle()
-        }
-        .padding()
-        .background(.blue)
-        .foregroundColor(.white)
-        .cornerRadius(10)
         VStack{
-            HStack {
-                ForEach(options, id: \.self) { option in
-                    Image(option)
-                        .resizable()
-                        .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 100)
-                        .selected(with: optionSelected, actual: option)
-                        
-                        
-                }
-            }
-            HStack{
-                var winString = win ? "win" : "lose"
-                Text("Win")
-                    .selected(with: winString, actual: "win")
-                Text("Lose")
-                    .selected(with: winString, actual: "lose")
+            Text("Score: \(score)")
+                .frame(width: 100000, height: 50)
+                .background(.gray)
+                .foregroundColor(.white)
+            Spacer()
+            Button("▶️ Play"){
+                optionSelected = options[Int.random(in: 0..<3)]
+                win.toggle()
             }
             .padding()
-        }
-        .padding()
-        
-        HStack {
-            ForEach(options, id: \.self) { option in
-                Button(option){
-                    if(optionSelected == options[0]){
-                        if(win){
-                            score = (option == options[1]) ? score+10 : score-10
-                            
-                        } else{
-                            score = (option == options[0] || option == options[2]) ? score+10 : score-10
-                            
-                        }
-                    } else if(optionSelected == options[1]){
-                        if(win){
-                            score = (option == options[2]) ? score+10 : score-10
-                    
-                        }else{
-                            score = (option == options[0] || option == options[1]) ? score+10 : score-10
-                           
-                        }
-                    }else if(optionSelected == options[2]){
-                        if(win){
-                            score = (option == options[0]) ? score+10 : score-10
-                            
-                        }else{
-                            score = (option == options[2] || option == options[1]) ? score+10 : score-10
-                        }
+            .background(.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            VStack{
+                HStack {
+                    ForEach(options, id: \.self) { option in
+                        Image(option)
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                            .selected(with: optionSelected, actual: option)
+                        
+                        
+                        
                     }
-                    
+                }
+                HStack{
+                    let winString = win ? "win" : "lose"
+                    Image("win")
+                        .resizable()
+                        .frame(width: 80, height: 80)
+                        .selected(with: winString, actual: "win")
+                    Image("lose")
+                        .resizable()
+                        .frame(width: 80, height: 80)
+                        .selected(with: winString, actual: "lose")
                 }
                 .padding()
-                .background(.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
             }
+            .padding()
+            
+            HStack {
+                ForEach(options, id: \.self) { option in
+                    Button(option){
+                        if(optionSelected == options[0]){
+                            if(win){
+                                score = (option == options[1]) ? score+10 : score-10
+                                
+                            } else{
+                                score = (option == options[0] || option == options[2]) ? score+10 : score-10
+                                
+                            }
+                        } else if(optionSelected == options[1]){
+                            if(win){
+                                score = (option == options[2]) ? score+10 : score-10
+                                
+                            }else{
+                                score = (option == options[0] || option == options[1]) ? score+10 : score-10
+                                
+                            }
+                        }else if(optionSelected == options[2]){
+                            if(win){
+                                score = (option == options[0]) ? score+10 : score-10
+                                
+                            }else{
+                                score = (option == options[2] || option == options[1]) ? score+10 : score-10
+                            }
+                        }
+                        
+                    }
+                    .padding()
+                    .background(.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+            }
+            Spacer()
         }
+        
     }
 }
 
